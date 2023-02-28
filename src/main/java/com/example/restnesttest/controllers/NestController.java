@@ -34,6 +34,9 @@ public class NestController {
     public ResponseEntity<Nest> find(
             @PathVariable("id") long id
     ) {
+        if (id <= 0)
+            return ResponseEntity.badRequest().build();
+
         Optional<Nest> nest = birdService.findNestById(id);
         return nest.isPresent()
                 ? ResponseEntity.ok(nest.get())
