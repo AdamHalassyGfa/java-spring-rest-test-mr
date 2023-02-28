@@ -49,7 +49,7 @@ public class BirdService {
                 .collect(Collectors.toList());
     }
 
-    public Bird createBird(int nestID, String name) {
+    public Bird createBird(long nestID, String name) {
         Optional<Nest> nest = findNestById(nestID);
         if (nest.isEmpty())
             throw new BirdException("Nest not found.");
