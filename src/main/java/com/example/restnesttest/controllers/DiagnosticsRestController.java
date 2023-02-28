@@ -13,4 +13,5 @@ public class DiagnosticsRestController
     public EchoResponse echo(String message) {
         return new EchoResponse(message);
     }
+
 }
