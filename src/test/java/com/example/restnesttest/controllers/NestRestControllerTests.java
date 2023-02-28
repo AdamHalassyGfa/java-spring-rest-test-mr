@@ -75,7 +75,7 @@ public class NestRestControllerTests {
                 )
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id", is(666l)))
+                .andExpect(jsonPath("$.id", is(666)))
                 .andExpect(jsonPath("$.name", is("TEST")));
     }
 }
