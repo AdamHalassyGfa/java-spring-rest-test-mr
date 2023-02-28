@@ -1,7 +1,9 @@
 package com.example.restnesttest.controllers;
 
+import com.example.restnesttest.data.entities.Bird;
 import com.example.restnesttest.data.entities.Nest;
 import com.example.restnesttest.services.BirdService;
+import jdk.jshell.spi.ExecutionControl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,8 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
-
-import static org.springframework.http.ResponseEntity.notFound;
 
 @RestController
 public class NestController {
@@ -49,5 +49,12 @@ public class NestController {
                 .toArray(Nest[]::new);
         return ResponseEntity.ok(nests);
 
+    }
+
+    @GetMapping("api/nest/{id}/birds")
+    public ResponseEntity<Bird[]> listBirds(
+            @PathVariable("id") long id
+    ) throws ExecutionControl.NotImplementedException {
+        throw new ExecutionControl.NotImplementedException("This method is not implemented yet.");
     }
 }

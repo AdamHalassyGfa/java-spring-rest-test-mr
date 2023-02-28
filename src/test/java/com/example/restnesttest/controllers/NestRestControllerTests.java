@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
@@ -73,5 +74,19 @@ public class NestRestControllerTests {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(666)))
                 .andExpect(jsonPath("$.name", is("TEST")));
+    }
+
+    @Test
+    void listBirdsOkTest() throws  Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/nest/34/birds")
+                )
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].id", is(65)))
+                .andExpect(jsonPath("$[0].name", is("TEST_1")))
+                .andExpect(jsonPath("$[1].id", is(66)))
+                .andExpect(jsonPath("$[1].name", is("TEST_2")));
     }
 }
