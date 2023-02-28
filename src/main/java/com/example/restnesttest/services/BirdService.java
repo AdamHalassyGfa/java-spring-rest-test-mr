@@ -5,6 +5,8 @@ import com.example.restnesttest.data.entities.Nest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 
 @Service
 public class BirdService {
@@ -18,6 +20,10 @@ public class BirdService {
 
     public Nest[] getAllNests() {
         return new Nest[0];
+    }
+
+    public Optional<Nest> findNestById(long id) {
+        return nestRepository.findById(id);
     }
 
     public Nest createNest(String name) {
