@@ -5,7 +5,10 @@ import com.example.restnesttest.data.entities.Nest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 
 @Service
@@ -31,5 +34,11 @@ public class BirdService {
         newNest.setName(name);
 
         return nestRepository.save(newNest);
+    }
+
+    public List<Nest> findAll() {
+        return StreamSupport
+                .stream(nestRepository.findAll().spliterator(), false)
+                .collect(Collectors.toList());
     }
 }

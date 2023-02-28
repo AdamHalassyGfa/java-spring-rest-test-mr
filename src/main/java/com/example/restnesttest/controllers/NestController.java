@@ -36,10 +36,15 @@ public class NestController {
     ) {
         Optional<Nest> nest = birdService.findNestById(id);
         return nest.isPresent()
-            ? ResponseEntity.ok(nest.get())
-            : ResponseEntity.notFound().build();
+                ? ResponseEntity.ok(nest.get())
+                : ResponseEntity.notFound().build();
+    }
 
-
+    @GetMapping("api/nest/list")
+    public ResponseEntity<Nest[]> list() {
+        Nest[] nests = birdService.findAll()
+                .toArray(Nest[]::new);
+        return ResponseEntity.ok(nests);
 
     }
 }
