@@ -17,8 +17,7 @@ import javax.swing.*;
 import java.util.Optional;
 
 import static org.hamcrest.core.Is.is;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -44,6 +43,25 @@ public class NestRestControllerTests {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(701)))
                 .andExpect(jsonPath("$.name", is("FOUND_NEST")));
+    }
+
+    @Test
+    void getNestTestNotFoundTest() throws Exception {
+        when(birdService.findNestById(eq(10l)))
+                .thenAnswer(a -> Optional.of(new Nest(a.getArgument(0), "FOUND_NEST")));
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/nest/45")
+                )
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void getNestTestBadRequestTest() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/nest/-45")
+                )
+                .andExpect(status().isBadRequest());
     }
 
     @Test
