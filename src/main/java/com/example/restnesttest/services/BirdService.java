@@ -1,6 +1,8 @@
 package com.example.restnesttest.services;
 
+import com.example.restnesttest.data.BirdRepository;
 import com.example.restnesttest.data.NestRepository;
+import com.example.restnesttest.data.entities.Bird;
 import com.example.restnesttest.data.entities.Nest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,10 +17,15 @@ import java.util.stream.StreamSupport;
 public class BirdService {
 
     private final NestRepository nestRepository;
+    private final BirdRepository birdRepository;
 
     @Autowired
-    public  BirdService(NestRepository nestRepository)    {
+    public BirdService(
+            NestRepository nestRepository,
+            BirdRepository birdRepository
+    ) {
         this.nestRepository = nestRepository;
+        this.birdRepository = birdRepository;
     }
 
     public Nest[] getAllNests() {
@@ -40,5 +47,14 @@ public class BirdService {
         return StreamSupport
                 .stream(nestRepository.findAll().spliterator(), false)
                 .collect(Collectors.toList());
+    }
+
+    public Bird createBird(int nestID, String name) {
+        Optional<Nest> nest = findNestById(nestID);
+        if (nest.isEmpty())
+            throw new BirdException("Nest not found.");
+
+        Bird bird = new Bird(0l, name, nest.get());
+        return birdRepository.save(bird);
     }
 }
