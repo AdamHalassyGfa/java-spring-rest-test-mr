@@ -3,6 +3,7 @@ package com.example.restnesttest.controllers;
 
 import com.example.restnesttest.data.entities.Bird;
 import com.example.restnesttest.data.entities.Nest;
+import com.example.restnesttest.services.BirdException;
 import com.example.restnesttest.services.BirdService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,20 @@ public class BirdRestControllerTests {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(78)))
                 .andExpect(jsonPath("$.name", is("TEST_BIRD")));
+
+    }
+
+    @Test
+    public void createBirdExceptionTest() throws Exception {
+        when(birdService.createBird(eq(99l), anyString()))
+                .thenThrow(new BirdException("An exception."));
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/api/bird")
+                        .param("name", "TEST_BIRD")
+                        .param("nestID",  "99")
+                )
+                .andExpect(status().isInternalServerError());
 
     }
 }
