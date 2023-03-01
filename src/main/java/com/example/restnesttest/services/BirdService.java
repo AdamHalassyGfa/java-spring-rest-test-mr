@@ -7,7 +7,6 @@ import com.example.restnesttest.data.entities.Nest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -55,14 +54,15 @@ public class BirdService {
         if (nest.isEmpty())
             throw new BirdException("Nest not found.");
 
-        Bird bird = new Bird(0l, name, nest.get());
+        Bird bird = new Bird(0L, name, nest.get());
         return birdRepository.save(bird);
     }
 
     public List<Bird> findBirdsByNest(long nestId) {
         Optional<Nest> nest = findNestById(nestId);
-        return nest.isEmpty()
-            ? new ArrayList<>()
-            : birdRepository.findByNest(nest.get());
+        if (nest.isEmpty())
+            throw new NestNotFoundException("The nest was not found.");
+
+        return birdRepository.findByNest(nest.get());
     }
 }
