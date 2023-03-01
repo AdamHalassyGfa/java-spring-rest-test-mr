@@ -54,7 +54,10 @@ public class NestController {
     @GetMapping("api/nest/{id}/birds")
     public ResponseEntity<Bird[]> listBirds(
             @PathVariable("id") long id
-    ) throws ExecutionControl.NotImplementedException {
-        throw new ExecutionControl.NotImplementedException("This method is not implemented yet.");
+    ) {
+        Bird[] birds = birdService.findBirdsByNest(id)
+                .toArray(Bird[]::new);
+
+        return ResponseEntity.ok(birds);
     }
 }

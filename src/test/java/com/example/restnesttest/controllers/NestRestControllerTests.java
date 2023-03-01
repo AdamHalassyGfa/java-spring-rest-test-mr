@@ -1,5 +1,6 @@
 package com.example.restnesttest.controllers;
 
+import com.example.restnesttest.data.entities.Bird;
 import com.example.restnesttest.data.entities.Nest;
 import com.example.restnesttest.services.BirdService;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -77,7 +79,14 @@ public class NestRestControllerTests {
     }
 
     @Test
-    void listBirdsOkTest() throws  Exception {
+    void listBirdsOkTest() throws Exception {
+        Nest mockNest = new Nest(34L, "MOCK_NEST", new ArrayList<>());
+        when(birdService.findBirdsByNest(eq(34L)))
+                .thenAnswer(a -> Arrays.asList(
+                        new Bird(65L, "BIRD_1", mockNest),
+                        new Bird(69L, "BIRD_2", mockNest))
+                );
+
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/api/nest/34/birds")
                 )
@@ -85,8 +94,8 @@ public class NestRestControllerTests {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].id", is(65)))
-                .andExpect(jsonPath("$[0].name", is("TEST_1")))
-                .andExpect(jsonPath("$[1].id", is(66)))
-                .andExpect(jsonPath("$[1].name", is("TEST_2")));
+                .andExpect(jsonPath("$[0].name", is("BIRD_1")))
+                .andExpect(jsonPath("$[1].id", is(69)))
+                .andExpect(jsonPath("$[1].name", is("BIRD_2")));
     }
 }
