@@ -3,6 +3,7 @@ package com.example.restnesttest.controllers;
 import com.example.restnesttest.data.entities.Bird;
 import com.example.restnesttest.data.entities.Nest;
 import com.example.restnesttest.services.BirdService;
+import com.example.restnesttest.services.NestNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -97,5 +98,16 @@ public class NestRestControllerTests {
                 .andExpect(jsonPath("$[0].name", is("BIRD_1")))
                 .andExpect(jsonPath("$[1].id", is(69)))
                 .andExpect(jsonPath("$[1].name", is("BIRD_2")));
+    }
+
+    @Test
+    void listBirdsNotFoundTest() throws Exception {
+        when(birdService.findBirdsByNest(eq(23L)))
+                .thenThrow(new NestNotFoundException("Nest not found"));
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/nest/23/birds")
+                )
+                .andExpect(status().isNotFound());
     }
 }
